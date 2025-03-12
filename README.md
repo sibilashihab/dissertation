@@ -31,7 +31,7 @@ Install the dependencies using:
 '''
 bash
 pip install torch pandas numpy scikit-learn imbalanced-learn matplotlib seaborn scipy
-'''
+'''inline_code();
 
 Code Structure
 -------------------
