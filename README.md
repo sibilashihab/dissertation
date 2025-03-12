@@ -2,7 +2,7 @@ Deep Neural Network (DNN) for Classification
 ============================================
 This repository contains a PyTorch-based Deep Neural Network (DNN) implementation for multi-class classification tasks. The code includes preprocessing, training, evaluation, and testing functionalities. Below is a detailed explanation of the code and its components.
 
-## The main dataset used in this code is the EVSE-B-HPC.csv file located in the Host Events directory, and only the nonaugdnn.py works correctly for now
+##### The main dataset used in this code is the EVSE-B-HPC.csv file located in the Host Events directory, and only the nonaugdnn.py works correctly for now
 
 Overview
 ------------
@@ -28,7 +28,10 @@ The code requires the following Python libraries:
 **SciPy:** For statistical operations (e.g., Z-score).
 
 Install the dependencies using: 
-> pip install torch pandas numpy scikit-learn imbalanced-learn matplotlib seaborn scipy
+'''
+bash
+pip install torch pandas numpy scikit-learn imbalanced-learn matplotlib seaborn scipy
+'''
 
 Code Structure
 -------------------
@@ -253,8 +256,8 @@ Evaluates the trained model on the test set.
 
 Usage
 --------------
-Train the Model:
-Run the script to preprocess data, train the DNN, and evaluate it using cross-validation.
+
+> Run the _nonaugdnn.py_ file to run the model on the original dataset with no augmentation.
 
 Key Features
 Handles Imbalanced Data: Uses class weighting for the imbalanced dataset.
