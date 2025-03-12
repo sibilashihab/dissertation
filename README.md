@@ -19,13 +19,13 @@ Dependencies
 --------------
 The code requires the following Python libraries:
 
--**PyTorch**: For building and training the DNN.
--**Pandas:** For data manipulation and preprocessing.
--**NumPy:** For numerical operations.
--**Scikit-learn:** For preprocessing, feature selection, and evaluation metrics.
--**Imbalanced-learn:** For handling imbalanced datasets (e.g., SMOTE).
--**Matplotlib and Seaborn:** For visualization.
--**SciPy:** For statistical operations (e.g., Z-score).
+- **PyTorch**: For building and training the DNN.
+- **Pandas:** For data manipulation and preprocessing.
+- **NumPy:** For numerical operations.
+- **Scikit-learn:** For preprocessing, feature selection, and evaluation metrics.
+- **Imbalanced-learn:** For handling imbalanced datasets (e.g., SMOTE).
+- **Matplotlib and Seaborn:** For visualization.
+- **SciPy:** For statistical operations (e.g., Z-score).
 
 Install the dependencies using: 
 ```bash
