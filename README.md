@@ -28,10 +28,9 @@ The code requires the following Python libraries:
 **SciPy:** For statistical operations (e.g., Z-score).
 
 Install the dependencies using: 
-'''
-bash
-pip install torch pandas numpy scikit-learn imbalanced-learn matplotlib seaborn scipy
-'''inline_code();
+```bash
+    pip install torch pandas numpy scikit-learn imbalanced-learn matplotlib seaborn scipy
+```
 
 Code Structure
 -------------------
