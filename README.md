@@ -8,24 +8,24 @@ Overview
 ------------
 The code implements a DNN model for classifying network data based on attack types into multiple categories. It includes:
 
-Data preprocessing (cleaning, scaling, encoding, feature selection).
-A DNN architecture with dropout and batch normalization.
-Training with early stopping, learning rate scheduling, and mixed precision training.
-Cross-validation for model evaluation.
-Error analysis and debugging tools.
-Visualization of results (confusion matrix, PCA, etc.).
+-Data preprocessing (cleaning, scaling, encoding, feature selection).
+-A DNN architecture with dropout and batch normalization.
+-Training with early stopping, learning rate scheduling, and mixed precision training.
+-Cross-validation for model evaluation.
+-Error analysis and debugging tools.
+-Visualization of results (confusion matrix, PCA, etc.).
 
 Dependencies
 --------------
 The code requires the following Python libraries:
 
-**PyTorch**: For building and training the DNN.
-**Pandas:** For data manipulation and preprocessing.
-**NumPy:** For numerical operations.
-**Scikit-learn:** For preprocessing, feature selection, and evaluation metrics.
-**Imbalanced-learn:** For handling imbalanced datasets (e.g., SMOTE).
-**Matplotlib and Seaborn:** For visualization.
-**SciPy:** For statistical operations (e.g., Z-score).
+-**PyTorch**: For building and training the DNN.
+-**Pandas:** For data manipulation and preprocessing.
+-**NumPy:** For numerical operations.
+-**Scikit-learn:** For preprocessing, feature selection, and evaluation metrics.
+-**Imbalanced-learn:** For handling imbalanced datasets (e.g., SMOTE).
+-**Matplotlib and Seaborn:** For visualization.
+-**SciPy:** For statistical operations (e.g., Z-score).
 
 Install the dependencies using: 
 ```bash
