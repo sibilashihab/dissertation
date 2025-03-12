@@ -2,7 +2,7 @@ Deep Neural Network (DNN) for Classification
 ============================================
 This repository contains a PyTorch-based Deep Neural Network (DNN) implementation for multi-class classification tasks. The code includes preprocessing, training, evaluation, and testing functionalities. Below is a detailed explanation of the code and its components.
 
-#### The main dataset used in this code is the EVSE-B-HPC.csv file located in the Host Events directory, and only the nonaugdnn.py works correctly for now
+### The main dataset used in this code is the EVSE-B-HPC.csv file located in the Host Events directory, and only the nonaugdnn.py works correctly for now
 
 Overview
 ------------
