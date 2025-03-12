@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler, MinMaxScaler
 from imblearn.over_sampling import SMOTENC, SMOTE
 from sklearn.model_selection import train_test_split, KFold, GridSearchCV
-from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, make_scorer
+from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, make_scorer, accuracy_score
 from torch.amp import GradScaler, autocast
 from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt
@@ -14,7 +14,6 @@ import seaborn as sns
 from scipy.stats import zscore
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
 from sklearn.feature_selection import SelectKBest, mutual_info_classif
 from skorch import NeuralNetClassifier
 
@@ -59,9 +58,9 @@ def dataPrep(inputFile, outputFile, fitScaler=None, fitEncoder=None):
 
     # Column selection mapping for different input files
     fileFeatures = {
-        "Host Events/EVSE-B-HPC.csv": ["time", "cpu_cycles", "cpu-cycles", "cpu-migrations", "context-switches", "cgroup-switches", "raw_syscalls_sys_enter", "raw_syscalls_sys_exit", "syscalls_sys_enter_close",  "syscalls_sys_enter_read", "syscalls_sys_enter_write", "syscalls_sys_exit_write", "syscalls_sys_exit_read", "syscalls_sys_exit_close",  "State", "Attack", "Scenario", "Label", "interface"],
-        "Host Events/EVSE-B-Kernel-Events.csv": ["time", "cpu_cycles", "cpu-cycles", "cpu-migrations", "context-switches", "cgroup-switches", "syscalls:sys_enter_close", "syscalls:sys_exit_close", "State", "Attack", "Attack-Group", "Label", "interface"],
-        "Power Consumption/EVSE-B-PowerCombined.csv": ["time", "shunt_voltage", "bus_voltage_V", "current_mA", "power_mW", "State", "Attack", "Attack-Group", "Label", "interface"],
+        "Host Events/EVSE-B-HPC.csv": ["cpu_cycles", "cpu-cycles", "cpu-migrations", "context-switches", "cgroup-switches", "page-faults", "raw_syscalls_sys_enter", "raw_syscalls_sys_exit", "syscalls_sys_enter_close",  "syscalls_sys_enter_read", "syscalls_sys_enter_write", "syscalls_sys_exit_rt_sigprocmask", "syscalls_sys_exit_ppoll", "syscalls_sys_exit_getpid", "syscalls_sys_enter_rt_sigprocmask", "sched_sched_waking", "sched_sched_wakeup", "syscalls_sys_exit_write", "syscalls_sys_exit_read", "syscalls_sys_exit_close",  "State", "Attack", "Scenario", "Label", "interface"],
+        "Host Events/EVSE-B-Kernel-Events.csv": ["cpu_cycles", "cpu-cycles", "cpu-migrations", "context-switches", "cgroup-switches", "syscalls:sys_enter_close", "syscalls:sys_exit_close", "State", "Attack", "Attack-Group", "Label", "interface"],
+        "Power Consumption/EVSE-B-PowerCombined.csv": ["shunt_voltage", "bus_voltage_V", "current_mA", "power_mW", "State", "Attack", "Attack-Group", "Label", "interface"],
     }
 
     # Filter columns based on the specific file
@@ -187,11 +186,11 @@ def debugTestSet(X_train, y_train, X_test, y_test, numCols, catCols):
     # Comparing feature distributions
     # Create a list of remaining column indices after removing zero-variance features
     finalIndex = [i for i in range(X_train.shape[1])]
-    print(f"Remaining column indices: {finalIndex}")
+    #print(f"Remaining column indices: {finalIndex}")
 
     # Filter numCols to only include indices that are in finalIndex
     numCols = [colId for colId in numCols if colId in finalIndex]
-    print(f"Updated numCols: {numCols}")
+    #print(f"Updated numCols: {numCols}")
 
     #Checking for each feature
     '''for colId in numCols:
@@ -286,7 +285,6 @@ def trainModel(model, X_train, y_train, X_val, y_val, epochNum=100, learnRate=0.
     trainingSet = torch.utils.data.TensorDataset(X_train, y_train)
     trainingLoader = torch.utils.data.DataLoader(trainingSet, batch_size=128, shuffle=True)
 
-    #Using best loss to trigger early stopping in training if model loss doesnt improve after 10 epochs
     bestLoss = float('inf')
     bestWeight = None    
     patience = 5
@@ -346,14 +344,14 @@ def trainModel(model, X_train, y_train, X_val, y_val, epochNum=100, learnRate=0.
               f"F1-score: {valf1:.4f}")
 
         # Early Stopping
-        '''if valLoss.item() < bestLoss:
+        if valLoss.item() < bestLoss:
             bestLoss = valLoss.item()
             counter = 0
         else: 
             counter += 1
             if counter >= patience: # If model loss doesnt improve after 10 epochs stop the training to prevent overfitting
                 print("Early stopping triggered!")
-                break'''   
+                break   
              
         model.load_state_dict(bestWeight) #Loading best model weights
         scheduler.step() #reduce learning rate
@@ -455,7 +453,7 @@ def testModel(model, X_test, y_test):
     plt.title("Confusion Matrix")
     plt.show()
 
-    return y_pred  # Return predictions for further analysis if needed
+    return y_pred  # Return predictions
 
 # File paths for input and output
 inputFiles = ["Host Events/EVSE-B-HPC.csv"]
@@ -465,7 +463,7 @@ for inputFile, outputFile in zip(inputFiles, outputFiles):
     X_tensor, y_tensor, inputSize, targetVarEnc, scaler, labelEnc = dataPrep(inputFile, outputFile)
 
     # Analyze class distribution
-    print("Class Distribution Analysis:")
+    #print("Class Distribution Analysis:")
     classCounter = pd.Series(y_tensor.numpy()).value_counts()
     classProportion = classCounter / len(y_tensor)
     print("Class Proportions:\n", classProportion)
@@ -485,7 +483,7 @@ for inputFile, outputFile in zip(inputFiles, outputFiles):
     outputSize = len(targetVarEnc.classes_)  # For multiclass classification, this is the number of attack types
 
     # Initialize the DNN model
-    hiddenSize = 512  # Adjust based on dataset size and complexity
+    hiddenSize = 512  # might need to adjust
     model = DNN(inputSize, hiddenSize, outputSize)
 
     # Check if CUDA is available
@@ -507,7 +505,7 @@ for inputFile, outputFile in zip(inputFiles, outputFiles):
     crossValModel(model, X_train, y_train, epochNum=50, learnRate=0.005, k=5)
 
     # Load and preprocess test data
-    testFile = "Host Events/EVSE-B-HPC-cleaned.csv"  # Adjust with your test file
+    testFile = "Host Events/EVSE-B-HPC-cleaned.csv"
     XtestTensor, ytestTensor, _, _, _, _ = dataPrep(testFile, "test-cleaned.csv", fitScaler=scaler, fitEncoder=labelEnc)
 
     # Remove outliers from the test set
