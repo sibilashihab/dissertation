@@ -8,12 +8,12 @@ Overview
 ------------
 The code implements a DNN model for classifying network data based on attack types into multiple categories. It includes:
 
--Data preprocessing (cleaning, scaling, encoding, feature selection).
--A DNN architecture with dropout and batch normalization.
--Training with early stopping, learning rate scheduling, and mixed precision training.
--Cross-validation for model evaluation.
--Error analysis and debugging tools.
--Visualization of results (confusion matrix, PCA, etc.).
+- Data preprocessing (cleaning, scaling, encoding, feature selection).
+- A DNN architecture with dropout and batch normalization.
+- Training with early stopping, learning rate scheduling, and mixed precision training.
+- Cross-validation for model evaluation.
+- Error analysis and debugging tools.
+- Visualization of results (confusion matrix, PCA, etc.).
 
 Dependencies
 --------------
